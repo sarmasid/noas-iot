@@ -72,9 +72,9 @@ void loop() {
       swSerial.println(error);
     }
   delay(10000);
-  swSerial.end();
+  //swSerial.end();
   arduinoSleep(1);
-  swSerial.begin(9600);
+  //swSerial.begin(9600);
  //if(fNo==255) softwareReset::standard();
 }
 
@@ -83,7 +83,7 @@ void arduinoSleep(long idlePeriodInMin){
   nCycle = idlePeriodInMin*60/LOW_POWER_PERIOD;
    for (int i=0; i<nCycle; i++) {  
     LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-    swSerial.print(".");
+    //swSerial.print(".");
     //swSerial.flush();
     delay(10); 
    }
