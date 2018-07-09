@@ -1,7 +1,8 @@
 #include <XBee.h>
 XBee xbee = XBee();
+uint8_t payload[] =  {'H', 'i'};
 XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x4155DDA4); //0x416C44C1); //destAddr);
-//ZBTxRequest zbTx = ZBTxRequest(addr64, payload, payloadLength);
+ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
 ZBTxStatusResponse txStatus = ZBTxStatusResponse();
 
 uint8_t dbCmd[2] = {'D','B'}; 
@@ -61,26 +62,18 @@ typedef union XBee_Packet_t{
 
 
 int Xbsend(XBee_Packet_t xbp){ 
-int xbpl; //packet length
-xbpl = sizeof(sensorData_t);
-uint8_t payload[xbpl]; 
+
 //Serial.print(xbp.sensData.senseParam);
 //Serial.print(F("Frame # "));
 //Serial.println(xbp.sensData.frameNo);
 //Serial.println(xbp.sensData.bmeData.bme280TempVal);
 
- for(int i=0; i<xbpl; i++){
-      payload[i] = xbp.xbeePacket[i];
-      //Serial.println(payload[i], HEX);
- }
+ 
 
-/*-----this part is taken from A. Rapp's Series2_Tx example -----*/
-//XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x416C44C1); //destAddr);
-ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
-//ZBTxStatusResponse txStatus = ZBTxStatusResponse();
+/*----set the payload and its length---------------*/
+zbTx.setPayload(xbp.xbeePacket);
+zbTx.setPayloadLength(sizeof(xbp.xbeePacket));
 
-//Serial.print(F("Frame id of current packet: "));
-//Serial.println(zbTx.getFrameId());
 /*----send the packet-------------*/
 xbee.send(zbTx);
 
